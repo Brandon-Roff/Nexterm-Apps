@@ -44,6 +44,6 @@ x-nexterm:
   name: Gitea
   version: 1.24.2
   description: Private, Fast, Reliable DevOps Platform
-  icon: https://raw.githubusercontent.com/gnmyt/Nexterm-AppStore/main/logos/Gitea.png
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Gitea.png
   category: Development
   port: 3000
