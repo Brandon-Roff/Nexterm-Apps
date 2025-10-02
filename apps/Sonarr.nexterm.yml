@@ -18,6 +18,6 @@ x-nexterm:
   name: Sonarr
   version: latest
   description: Smart PVR for newsgroup and bittorrent users
-  icon: https://raw.githubusercontent.com/gnmyt/Nexterm-AppStore/main/logos/Sonarr.png
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/logos/sonarr.png
   category: Media
   port: 8989
