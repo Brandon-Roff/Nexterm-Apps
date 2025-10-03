@@ -22,7 +22,7 @@
 - [🎯 Overview](#-overview)
 - [📱 Available Apps](#-available-apps)
 - [➕ Adding Apps to Nexterm](#-adding-apps-to-nexterm)
-- [📝 Contributing](#-contributing
+- [📝 Contributing](#-contributing)
     - [🐛 Bug Reports](#-bug-reports)
     - [✨ New Apps](#-new-apps)
     - [🔧 Improvements](#-improvements)
@@ -107,8 +107,7 @@ Want an app you don't see here? [Submit a feature request](https://github.com/Br
 ### 💬 Community
 
 - **GitHub Issues** - [Report bugs or request features](https://github.com/Brandon-Roff/Nexterm-Apps/issues)
-- **Project Board** - [Track progress](https://github.com/Brandon-Roff/Nexterm-Apps/projects)
-- **Discussions** - [Join the conversation](https://github.com/Brandon-Roff/Nexterm-Apps/discussions)
+- **Project Board** - [Track progress](https://github.com/users/Brandon-Roff/projects/4)
 
 ### 📧 Contact
 
