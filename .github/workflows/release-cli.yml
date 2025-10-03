@@ -1,4 +1,4 @@
-name: 🚀 Auto Release
+name: 🚀 Auto Release (GitHub CLI)
 
 on:
   push:
@@ -13,15 +13,6 @@ on:
 permissions:
   contents: write
   pull-requests: read
-  actions: read
-  checks: read
-  deployments: read
-  issues: read
-  packages: read
-  pages: read
-  repository-projects: read
-  security-events: read
-  statuses: read
 
 jobs:
   check-version:
@@ -81,6 +72,7 @@ jobs:
           fi
 
       - name: 📝 Generate changelog
+        if: steps.version.outputs.tag_exists == 'false'
         id: changelog
         run: |
           # Get the last release tag
@@ -112,10 +104,7 @@ jobs:
           1. Download and extract the release
           2. Browse the \`apps/\` directory
           3. Deploy with: \`docker-compose -f AppName.nexterm.yml up -d\`
-          4. Access your apps through their configured ports
-
-          ---
-          **Full Changelog**: https://github.com/${{ github.repository }}/commits/${{ steps.version.outputs.tag }}"
+          4. Access your apps through their configured ports"
           else
             # Generate changelog from commits since last tag
             CHANGELOG="## 📋 What's Changed
@@ -126,17 +115,14 @@ jobs:
           - 📱 **Apps**: $(find apps -name "*.nexterm.yml" | wc -l) applications available
           - 🎨 **Icons**: Updated application icons and branding
           - 📝 **Documentation**: Improved setup guides and README
-          - 🔧 **Configuration**: Enhanced Docker Compose configurations
-
-          ---
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ steps.version.outputs.tag }}"
+          - 🔧 **Configuration**: Enhanced Docker Compose configurations"
           fi
           
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Save changelog to file
+          echo "$CHANGELOG" > changelog.md
 
       - name: 📦 Create release package
+        if: steps.version.outputs.tag_exists == 'false'
         run: |
           # Create a clean directory structure for the release
           mkdir -p nexterm-apps-${{ steps.version.outputs.version }}
@@ -225,21 +211,17 @@ jobs:
           # Also create a tar.gz for Linux users
           tar -czf nexterm-apps-${{ steps.version.outputs.version }}.tar.gz nexterm-apps-${{ steps.version.outputs.version }}/
 
-      - name: 🏷️ Create Release
+      - name: 🏷️ Create Release with GitHub CLI
         if: steps.version.outputs.tag_exists == 'false'
-        uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: 🚀 Nexterm Apps v${{ steps.version.outputs.version }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
-          generate_release_notes: false
-          make_latest: true
-          files: |
-            nexterm-apps-${{ steps.version.outputs.version }}.zip
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Create the release using GitHub CLI
+          gh release create ${{ steps.version.outputs.tag }} \
+            --title "🚀 Nexterm Apps v${{ steps.version.outputs.version }}" \
+            --notes-file changelog.md \
+            --latest \
+            nexterm-apps-${{ steps.version.outputs.version }}.zip \
             nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
 
       - name: ⚠️ Tag Already Exists
@@ -249,6 +231,7 @@ jobs:
           echo "To create a new release, update the version in .version file to a higher number."
 
       - name: 📊 Release Summary
+        if: steps.version.outputs.tag_exists == 'false'
         run: |
           echo "## 🎉 Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
