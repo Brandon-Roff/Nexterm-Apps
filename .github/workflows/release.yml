@@ -1,0 +1,252 @@
+name: 🚀 Auto Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'apps/**'
+      - 'logos/**' 
+      - 'Apps.md'
+      - '.version'
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      version_changed: ${{ steps.version.outputs.changed }}
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check version file
+        id: version
+        run: |
+          if [ ! -f .version ]; then
+            echo "1.0" > .version
+            echo "version=1.0" >> $GITHUB_OUTPUT
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            CURRENT_VERSION=$(cat .version)
+            # Check if version file was modified in last commit
+            if git diff HEAD~1 HEAD --name-only | grep -q "^\.version$"; then
+              echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+              echo "changed=true" >> $GITHUB_OUTPUT
+            else
+              echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+              echo "changed=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  create-release:
+    needs: check-version
+    if: needs.check-version.outputs.version_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏷️ Get version
+        id: version
+        run: |
+          VERSION=$(cat .version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: 📝 Generate changelog
+        id: changelog
+        run: |
+          # Get the last release tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          
+          if [ -z "$LAST_TAG" ]; then
+            # First release
+            CHANGELOG="## 🎉 Initial Release
+
+          ### 📱 Applications Included
+          $(find apps -name "*.nexterm.yml" | wc -l) Docker applications ready for deployment
+
+          ### ✨ Features
+          - 🐳 Production-ready Docker Compose configurations
+          - 🎨 Beautiful, consistent application icons
+          - 📝 Comprehensive documentation
+          - 🔧 Nexterm-optimized metadata
+          - 🚀 One-click deployment support
+
+          ### 📦 What's Included
+          - **Media Apps**: Sonarr, Radarr, Prowlarr, Overseerr, Immich, Tautulli, Transmission
+          - **Development Tools**: Gitea, IT Tools
+          - **Dashboard**: Homarr
+          - **Lifestyle**: Mealie
+          - **Networking**: Uptime Kuma, MySpeed
+          - **System Tools**: WatchTower
+
+          ### 🚀 Getting Started
+          1. Download and extract the release
+          2. Browse the \`apps/\` directory
+          3. Deploy with: \`docker-compose -f AppName.nexterm.yml up -d\`
+          4. Access your apps through their configured ports
+
+          ---
+          **Full Changelog**: https://github.com/${{ github.repository }}/commits/${{ steps.version.outputs.tag }}"
+          else
+            # Generate changelog from commits since last tag
+            CHANGELOG="## 📋 What's Changed
+
+          $(git log $LAST_TAG..HEAD --pretty=format:"- %s" --no-merges)
+
+          ### ✨ Highlights
+          - 📱 **Apps**: $(find apps -name "*.nexterm.yml" | wc -l) applications available
+          - 🎨 **Icons**: Updated application icons and branding
+          - 📝 **Documentation**: Improved setup guides and README
+          - 🔧 **Configuration**: Enhanced Docker Compose configurations
+
+          ---
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ steps.version.outputs.tag }}"
+          fi
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📦 Create release package
+        run: |
+          # Create a clean directory structure for the release
+          mkdir -p nexterm-apps-${{ steps.version.outputs.version }}
+          
+          # Copy all application files
+          cp -r apps nexterm-apps-${{ steps.version.outputs.version }}/
+          cp -r logos nexterm-apps-${{ steps.version.outputs.version }}/
+          cp -r helper_scripts nexterm-apps-${{ steps.version.outputs.version }}/
+          
+          # Copy documentation
+          cp README.md nexterm-apps-${{ steps.version.outputs.version }}/
+          cp Apps.md nexterm-apps-${{ steps.version.outputs.version }}/
+          cp LICENSE nexterm-apps-${{ steps.version.outputs.version }}/
+          
+          # Create version info file
+          cat > nexterm-apps-${{ steps.version.outputs.version }}/VERSION.txt << EOF
+          Nexterm Apps Collection
+          Version: ${{ steps.version.outputs.version }}
+          Release Date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          Build: ${{ github.sha }}
+          
+          Applications Included: $(find apps -name "*.nexterm.yml" | wc -l)
+          Categories: Media, Development, Dashboard, Lifestyle, Networking, System
+          
+          For installation instructions, see README.md
+          For complete app list, see Apps.md
+          
+          Repository: https://github.com/${{ github.repository }}
+          EOF
+          
+          # Create installation script
+          cat > nexterm-apps-${{ steps.version.outputs.version }}/install.sh << 'EOF'
+          #!/bin/bash
+          # Nexterm Apps Quick Install Script
+          
+          echo "🚀 Nexterm Apps Installer"
+          echo "=========================="
+          
+          if [ "$1" = "" ]; then
+            echo "📱 Available applications:"
+            ls apps/*.nexterm.yml | sed 's/apps\///g' | sed 's/\.nexterm\.yml//g' | sort
+            echo ""
+            echo "Usage: ./install.sh <app-name>"
+            echo "Example: ./install.sh sonarr"
+            exit 1
+          fi
+          
+          APP_NAME="$1"
+          APP_FILE="apps/${APP_NAME}.nexterm.yml"
+          
+          if [ ! -f "$APP_FILE" ]; then
+            echo "❌ App '$APP_NAME' not found!"
+            echo "📱 Available apps:"
+            ls apps/*.nexterm.yml | sed 's/apps\///g' | sed 's/\.nexterm\.yml//g' | sort
+            exit 1
+          fi
+          
+          echo "🚀 Installing $APP_NAME..."
+          
+          # Create app directory
+          mkdir -p "$APP_NAME"
+          cp "$APP_FILE" "$APP_NAME/docker-compose.yml"
+          
+          # Navigate to app directory and start
+          cd "$APP_NAME"
+          
+          echo "📦 Starting containers..."
+          docker-compose up -d
+          
+          if [ $? -eq 0 ]; then
+            echo "✅ $APP_NAME installed successfully!"
+            echo "🌐 Check your app at the configured port"
+            echo "📝 View logs: docker-compose logs -f"
+            echo "🛑 Stop app: docker-compose down"
+          else
+            echo "❌ Installation failed!"
+            exit 1
+          fi
+          EOF
+          
+          chmod +x nexterm-apps-${{ steps.version.outputs.version }}/install.sh
+          
+          # Create the zip package
+          zip -r nexterm-apps-${{ steps.version.outputs.version }}.zip nexterm-apps-${{ steps.version.outputs.version }}/
+          
+          # Also create a tar.gz for Linux users
+          tar -czf nexterm-apps-${{ steps.version.outputs.version }}.tar.gz nexterm-apps-${{ steps.version.outputs.version }}/
+
+      - name: 🏷️ Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          release_name: 🚀 Nexterm Apps v${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
+      - name: 📎 Upload ZIP Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nexterm-apps-${{ steps.version.outputs.version }}.zip
+          asset_name: nexterm-apps-${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
+
+      - name: 📎 Upload TAR.GZ Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
+          asset_name: nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
+          asset_content_type: application/gzip
+
+      - name: 📊 Release Summary
+        run: |
+          echo "## 🎉 Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag:** ${{ steps.version.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Applications:** $(find apps -name "*.nexterm.yml" | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Assets Created:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`nexterm-apps-${{ steps.version.outputs.version }}.zip\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`nexterm-apps-${{ steps.version.outputs.version }}.tar.gz\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links:" >> $GITHUB_STEP_SUMMARY
+          echo "- [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }})" >> $GITHUB_STEP_SUMMARY
+          echo "- [Download ZIP](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag }}/nexterm-apps-${{ steps.version.outputs.version }}.zip)" >> $GITHUB_STEP_SUMMARY
