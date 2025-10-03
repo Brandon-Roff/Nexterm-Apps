@@ -1,0 +1,24 @@
+services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./configs:/app/data/configs
+      - ./icons:/app/public/icons
+      - ./data:/data
+    ports:
+      - '7575:7575'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+
+x-nexterm:
+  name: Homarr
+  version: latest
+  description: Sleek, modern dashboard that puts all of your apps and services at your fingertips
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Homarr.png
+  category: Dashboard
+  port: 7575

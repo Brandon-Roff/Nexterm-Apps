@@ -1,0 +1,23 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - ./movies:/movies
+      - ./downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+x-nexterm:
+  name: Radarr
+  version: latest
+  description: A movie collection manager for Usenet and BitTorrent users
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Radarr.png
+  category: Media
+  port: 7878

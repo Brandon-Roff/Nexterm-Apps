@@ -1,0 +1,24 @@
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Etc/UTC
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_HTTP_API_TOKEN=mytoken
+      - WATCHTOWER_HTTP_API_METRICS=true
+    ports:
+      - 8080:8080
+
+x-nexterm:
+  name: WatchTower
+  version: latest
+  description: Automatically update running Docker containers when new images are available
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/WatchTower.png
+  category: System
+  port: 8080

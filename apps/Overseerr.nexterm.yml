@@ -1,0 +1,21 @@
+services:
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Etc/UTC
+      - PORT=5055
+    ports:
+      - 5055:5055
+    volumes:
+      - ./config:/app/config
+    restart: unless-stopped
+
+x-nexterm:
+  name: Overseerr
+  version: latest
+  description: Request management and media discovery tool for the Plex ecosystem
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Overseerr.png
+  category: Media
+  port: 5055

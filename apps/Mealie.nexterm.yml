@@ -18,7 +18,7 @@ services:
 x-nexterm:
   name: Mealie
   version: latest
-  description: A self-hosted recipe manager and meal planner with a RestAPI backend and a reactive frontend application built in Vue for a pleasant user experience for the whole family
+  description: A self-hosted recipe manager and meal planner
   icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Mealie.png
   category: Life
   port: 9925
