@@ -10,6 +10,10 @@ on:
       - '.version'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   check-version:
     runs-on: ubuntu-latest
@@ -204,36 +208,16 @@ jobs:
           tar -czf nexterm-apps-${{ steps.version.outputs.version }}.tar.gz nexterm-apps-${{ steps.version.outputs.version }}/
 
       - name: 🏷️ Create Release
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          release_name: 🚀 Nexterm Apps v${{ steps.version.outputs.version }}
+          name: 🚀 Nexterm Apps v${{ steps.version.outputs.version }}
           body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
-
-      - name: 📎 Upload ZIP Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nexterm-apps-${{ steps.version.outputs.version }}.zip
-          asset_name: nexterm-apps-${{ steps.version.outputs.version }}.zip
-          asset_content_type: application/zip
-
-      - name: 📎 Upload TAR.GZ Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
-          asset_name: nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
-          asset_content_type: application/gzip
+          files: |
+            nexterm-apps-${{ steps.version.outputs.version }}.zip
+            nexterm-apps-${{ steps.version.outputs.version }}.tar.gz
 
       - name: 📊 Release Summary
         run: |
