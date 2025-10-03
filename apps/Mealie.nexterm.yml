@@ -1,0 +1,24 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest
+    container_name: mealie
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - MAX_WORKERS=1
+      - WEB_CONCURRENCY=1
+      - BASE_URL=https://mealie.yourdomain.com
+    volumes:
+      - ./data:/app/data/
+    ports:
+      - 9925:9000
+    restart: unless-stopped
+
+x-nexterm:
+  name: Mealie
+  version: latest
+  description: A self-hosted recipe manager and meal planner with a RestAPI backend and a reactive frontend application built in Vue for a pleasant user experience for the whole family
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Mealie.png
+  category: Life
+  port: 9925
