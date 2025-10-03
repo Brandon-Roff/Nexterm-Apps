@@ -11,7 +11,7 @@
 [![Nexterm Compatible](https://img.shields.io/badge/Nexterm-Compatible-purple.svg)](https://nexterm.dev)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg?logo=docker)](https://docker.com)
 
-[View All Apps](./Apps.md)
+[View All Apps](./Apps.md) • [Add to Nexterm](#-adding-apps-to-nexterm) • [Request New App](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new?template=feature_request.md)
 
 </div>
 
@@ -95,7 +95,7 @@ Found an issue? [Create an issue](https://github.com/Brandon-Roff/Nexterm-Apps/i
 
 ### ✨ New Apps
 
-Want an app you don't see here? [Submit a feature request](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new) and let us know!
+Want an app you don't see here? [Submit a feature request](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new?template=feature_request.md) and let us know!
 
 ### 🔧 Improvements
 
