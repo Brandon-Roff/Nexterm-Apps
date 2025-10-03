@@ -1,0 +1,28 @@
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - TRANSMISSION_WEB_HOME=/transmission-web-control/
+      - USER=admin
+      - PASS=admin123
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+      - ./watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+
+x-nexterm:
+  name: Transmission
+  version: latest
+  description: Fast, easy, and free multi-platform BitTorrent client
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Transmission.png
+  category: Media
+  port: 9091

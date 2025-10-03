@@ -1,0 +1,21 @@
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+
+x-nexterm:
+  name: Tautulli
+  version: latest
+  description: Monitor your Plex Media Server with detailed analytics and statistics
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Tautulli.png
+  category: Media
+  port: 8181

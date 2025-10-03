@@ -1,0 +1,15 @@
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    ports:
+      - 8888:80
+
+x-nexterm:
+  name: IT Tools
+  version: latest
+  description: Collection of handy online tools for developers, with great UX
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/ITTools.png
+  category: Development
+  port: 8888

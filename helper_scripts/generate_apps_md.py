@@ -14,7 +14,7 @@ def generate_markdown_table(apps_metadata):
     separator = "|------|---------|-------------|------|----------|------|\n"
     rows = []
     for app in apps_metadata:
-        row = f"| ![icon]({app['icon']}) | {app['name']} | {app['version']} | {app['description']} | {app['port']} | {app['category']} |\n"
+        row = f"| <img src=\"{app['icon']}\" alt=\"icon\" width=\"32\" height=\"32\"> | {app['name']} | {app['version']} | {app['description']} | {app['port']} | {app['category']} |\n"
         rows.append(row)
     return header + separator + ''.join(rows)
 
