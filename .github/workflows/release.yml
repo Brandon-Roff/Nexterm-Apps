@@ -93,27 +93,6 @@ jobs:
           ### 📱 Applications Included
           $(find apps -name "*.nexterm.yml" | wc -l) Docker applications ready for deployment
 
-          ### ✨ Features
-          - 🐳 Production-ready Docker Compose configurations
-          - 🎨 Beautiful, consistent application icons
-          - 📝 Comprehensive documentation
-          - 🔧 Nexterm-optimized metadata
-          - 🚀 One-click deployment support
-
-          ### 📦 What's Included
-          - **Media Apps**: Sonarr, Radarr, Prowlarr, Overseerr, Immich, Tautulli, Transmission
-          - **Development Tools**: Gitea, IT Tools
-          - **Dashboard**: Homarr
-          - **Lifestyle**: Mealie
-          - **Networking**: Uptime Kuma, MySpeed
-          - **System Tools**: WatchTower
-
-          ### 🚀 Getting Started
-          1. Download and extract the release
-          2. Browse the \`apps/\` directory
-          3. Deploy with: \`docker-compose -f AppName.nexterm.yml up -d\`
-          4. Access your apps through their configured ports
-
           ---
           **Full Changelog**: https://github.com/${{ github.repository }}/commits/${{ steps.version.outputs.tag }}"
           else

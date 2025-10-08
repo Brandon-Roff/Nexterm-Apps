@@ -1,0 +1,20 @@
+services:
+  portainer:
+    container_name: Portainer-Enterprise
+    image: portainer/portainer-ee:latest
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/portainer_data:/data
+    restart: always
+  
+
+x-nexterm:
+  name: Portainer Enterprise Edition
+  version: latest
+  description: Portainer is a powerful, open-source management UI for Docker and Kubernetes
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Portainer.png
+  category: System
+  port: 9000
