@@ -1,0 +1,27 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:latest
+    container_name: NTFY
+    command:
+      - serve
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - /srv/ntfy/cache:/var/cache/ntfy:rw
+      - /srv/ntfy:/etc/ntfy:rw
+    healthcheck:
+        test: ["CMD-SHELL", "wget -q --tries=1 http://localhost:80/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1"]
+        interval: 60s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    ports:
+      - 6741:80
+
+x-nexterm:
+  name: NTFY
+  version: latest
+  description: A simple and reliable pub-sub notification service
+  icon: https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/NTFY.png
+  category: Utilities
+  port: 6741
