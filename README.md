@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Nexterm Logo](https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/logos/Nexterm.png)
+![Nexterm Logo](https://raw.githubusercontent.com/Nerdy-Technician/Nexterm-Apps/main/logos/Nexterm.png)
 
 **A curated collection of Docker applications optimized for Nexterm deployment**
 
@@ -11,7 +11,7 @@
 [![Nexterm Compatible](https://img.shields.io/badge/Nexterm-Compatible-purple.svg)](https://nexterm.dev)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg?logo=docker)](https://docker.com)
 
-[View All Apps](./Apps.md) • [Add to Nexterm](#-adding-apps-to-nexterm) • [Request New App](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new?template=feature_request.md)
+[View All Apps](./Apps.md) • [Add to Nexterm](#-adding-apps-to-nexterm) • [Request New App](https://github.com/Nerdy-Technician/Nexterm-Apps/issues/new?template=feature_request.md)
 
 </div>
 
@@ -65,7 +65,7 @@
 2. **Add Custom App Source**
    - Click **Add New Source**
    - Enter the Name: `NerdyTechApps`
-   - Enter the URL: `https://raw.githubusercontent.com/Brandon-Roff/Nexterm-Apps/main/apps/`
+   - Enter the URL: `https://raw.githubusercontent.com/Nerdy-Technician/Nexterm-Apps/main/apps/`
    - Click **Save**
    - Click **Refresh Apps**
 
@@ -87,7 +87,7 @@ We welcome contributions! Here's how you can help:
 
 ### 🐛 Bug Reports
 
-Found an issue? [Create an issue](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new) with:
+Found an issue? [Create an issue](https://github.com/Nerdy-Technician/Nexterm-Apps/issues/new) with:
 - App name and version
 - Error description
 - Steps to reproduce
@@ -95,7 +95,7 @@ Found an issue? [Create an issue](https://github.com/Brandon-Roff/Nexterm-Apps/i
 
 ### ✨ New Apps
 
-Want an app you don't see here? [Submit a feature request](https://github.com/Brandon-Roff/Nexterm-Apps/issues/new?template=feature_request.md) and let us know!
+Want an app you don't see here? [Submit a feature request](https://github.com/Nerdy-Technician/Nexterm-Apps/issues/new?template=feature_request.md) and let us know!
 
 ### 🔧 Improvements
 
@@ -106,13 +106,13 @@ Want an app you don't see here? [Submit a feature request](https://github.com/Br
 
 ### 💬 Community
 
-- **GitHub Issues** - [Report bugs or request features](https://github.com/Brandon-Roff/Nexterm-Apps/issues)
-- **Project Board** - [Track progress](https://github.com/users/Brandon-Roff/projects/4)
+- **GitHub Issues** - [Report bugs or request features](https://github.com/Nerdy-Technician/Nexterm-Apps/issues)
+- **Project Board** - [Track progress](https://github.com/users/Nerdy-Technician/projects/4)
 
 ### 📧 Contact
 
 - **Maintainer**: Brandon Roff
-- **GitHub**: [@Brandon-Roff](https://github.com/Brandon-Roff)
+- **GitHub**: [@Nerdy-Technician](https://github.com/Nerdy-Technician)
 
 ---
 
@@ -126,7 +126,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ for the self-hosting community**
 
-[⭐ Star this repo](https://github.com/Brandon-Roff/Nexterm-Apps/stargazers) • [🍴 Fork it](https://github.com/Brandon-Roff/Nexterm-Apps/fork) • [📝 Contribute](https://github.com/Brandon-Roff/Nexterm-Apps/pulls)
+[⭐ Star this repo](https://github.com/Nerdy-Technician/Nexterm-Apps/stargazers) • [🍴 Fork it](https://github.com/Nerdy-Technician/Nexterm-Apps/fork) • [📝 Contribute](https://github.com/Nerdy-Technician/Nexterm-Apps/pulls)
 
 </div>
 
